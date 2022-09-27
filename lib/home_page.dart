@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   String url = "213.139.209.162";
   bool isChange = false;
   bool isChangeSocket = false;
-
+  int socet = 0;
   getConnectivity() => subscription = Connectivity()
           .onConnectivityChanged
           .listen((ConnectivityResult result) async {
@@ -77,7 +77,15 @@ class _HomePageState extends State<HomePage> {
     var keyjson = await box.get("key");
     if (keyjson != null) {
       urlKey = keyjson;
-      webSocket();
+      Timer.periodic(Duration(seconds: 2), (Timer timer) {
+        socet++;
+        if (socet == 2) {
+          socet = 0;
+          timer.cancel();
+        } else {
+          webSocket();
+        }
+      });
     } else {
       _showMyDialog();
     }
